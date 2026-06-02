@@ -55,3 +55,4 @@ I would replace the image URL text field with **actual file upload** — letting
 - Helped write the responsive Tailwind layout for `NoticeCard` and the form components
 
 All generated code was reviewed, understood, and adjusted before committing. The architecture decisions (Pages Router, Prisma singleton pattern, `getServerSideProps` for the edit page) were chosen and verified manually.
+# reno-intern
