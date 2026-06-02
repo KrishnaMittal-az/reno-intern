@@ -1,40 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Notice Board
 
-## Getting Started
+A full-stack Notice Board built with **Next.js (Pages Router)**, **Prisma**, and **PostgreSQL** (Neon). Supports creating, reading, updating, and deleting notices. Urgent notices are always sorted to the top via a server-side Prisma `orderBy` query.
 
-First, run the development server:
+**Live demo:** _add your Vercel URL here_
+
+---
+
+## How to run locally
+
+### Prerequisites
+- Node.js 18+
+- A free [Neon](https://neon.tech) PostgreSQL database (or any PostgreSQL instance)
+
+### Steps
 
 ```bash
+# 1. Clone the repository
+git clone <your-repo-url>
+cd notice-board
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment
+cp .env.example .env
+# Edit .env and set your DATABASE_URL:
+# DATABASE_URL="postgresql://user:password@host:5432/dbname?schema=public"
+
+# 4. Run database migrations and generate Prisma client
+npx prisma migrate dev --name init
+
+# 5. Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## One thing I would improve with more time
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+I would replace the image URL text field with **actual file upload** — letting users pick a file from their device and storing it via a service like Cloudinary (free tier). The current implementation accepts a URL string, which works but isn't as user-friendly as a native file picker.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Where and how AI was used
 
-To learn more about Next.js, take a look at the following resources:
+**Claude Code (claude.ai/code)** was used as a development assistant throughout this project:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+- Scaffolded the project structure and directory layout
+- Generated the Prisma schema with the correct enums (`Category`, `Priority`) and model fields
+- Wrote the boilerplate for API route handlers (`pages/api/notices/index.ts`, `pages/api/notices/[id].ts`) including HTTP method routing, server-side validation, and correct status codes
+- Suggested using `orderBy: [{ priority: "desc" }, { createdAt: "desc" }]` to sort Urgent notices first at the database level (not in the browser)
+- Helped write the responsive Tailwind layout for `NoticeCard` and the form components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+All generated code was reviewed, understood, and adjusted before committing. The architecture decisions (Pages Router, Prisma singleton pattern, `getServerSideProps` for the edit page) were chosen and verified manually.
